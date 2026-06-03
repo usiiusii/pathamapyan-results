@@ -95,28 +95,29 @@
     </div>
 
     <script>
-        // Python Script မှ အလိုအလျောက် ရရှိလာမည့် Google Drive Link များ (နမူနာ Data)
-        // တကယ့်အောင်စာရင်းထွက်လာချိန်တွင် ဤ Link များကို အမှန်တကယ် Link များဖြင့် အစားထိုးရပါမည်။
-        const driveLinksData = {
-            "yangon": {
-                "pathamagyi": "https://drive.google.com/drive/folders/dummy-yangon-gyi",
-                "pathamalat": "https://drive.google.com/drive/folders/dummy-yangon-lat",
-                "pathamange": "https://drive.google.com/drive/folders/dummy-yangon-nge",
-                "mula": "https://drive.google.com/drive/folders/dummy-yangon-mula"
-            },
-            "mandalay": {
-                "pathamagyi": "https://drive.google.com/drive/folders/dummy-mdy-gyi",
-                "pathamalat": "https://drive.google.com/drive/folders/dummy-mdy-lat",
-                "pathamange": "https://drive.google.com/drive/folders/dummy-mdy-nge",
-                "mula": "https://drive.google.com/drive/folders/dummy-mdy-mula"
-            }
-            // အခြားသော တိုင်းနှင့် ပြည်နယ်များအတွက် Link များကို ဤနေရာတွင် ဆက်လက်ဖြည့်စွက်နိုင်ပါသည်။
-        };
+        // Data သိမ်းထားမည့် Variable
+        let driveLinksData = {};
 
+        // Website စပွင့်တာနဲ့ data.json ကို အလိုအလျောက် လှမ်းဖတ်ပါမည်
+        fetch('./data.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("JSON ဖိုင်ကို ရှာမတွေ့ပါ။");
+                }
+                return response.json();
+            })
+            .then(data => {
+                driveLinksData = data;
+                console.log("Data အောင်မြင်စွာ ရယူပြီးပါပြီ");
+            })
+            .catch(error => {
+                console.error("Data ယူရာတွင် Error ဖြစ်နေပါသည်:", error);
+            });
+
+        // ရှာဖွေမည် ခလုတ်ကို နှိပ်လိုက်သောအခါ လုပ်ဆောင်မည့် အလုပ်များ
         document.getElementById('searchBtn').addEventListener('click', function() {
             const state = document.getElementById('stateSelect').value;
             const level = document.getElementById('levelSelect').value;
-            const searchQuery = document.getElementById('searchInput').value.trim();
 
             // တိုင်း သို့မဟုတ် အတန်း မရွေးချယ်ထားပါက အသိပေးရန်
             if (!state || !level) {
@@ -130,11 +131,11 @@
                 return;
             }
 
-            // Data ထဲတွင် ရှာဖွေခြင်း
+            // data.json ထဲတွင် အချက်အလက် ရှိ/မရှိ စစ်ဆေးခြင်း
             if (driveLinksData[state] && driveLinksData[state][level]) {
                 const targetUrl = driveLinksData[state][level];
                 
-                // Loading ပြပြီး ဖွင့်ပေးရန်
+                // Loading ပြပြီး Drive သို့ ဖွင့်ပေးရန်
                 Swal.fire({
                     title: 'ရှာဖွေနေပါသည်...',
                     text: 'Google Drive သို့ ခေါ်ဆောင်သွားပါမည်',
