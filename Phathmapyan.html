@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ပထမပြန် အောင်စာရင်း ရှာဖွေရေး</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&display=swap');
+        body { font-family: 'Padauk', sans-serif; }
+        
+        /* မှန်သားပြင် Effect Custom Style */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* SweetAlert Custom Font */
+        .swal2-popup { font-family: 'Padauk', sans-serif !important; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+
+    <div class="absolute top-10 left-10 w-64 h-64 bg-blue-500/30 rounded-full blur-3xl mix-blend-screen pointer-events-none"></div>
+    <div class="absolute bottom-10 right-10 w-72 h-72 bg-purple-500/30 rounded-full blur-3xl mix-blend-screen pointer-events-none"></div>
+
+    <div class="glass-panel shadow-2xl rounded-3xl p-8 w-full max-w-2xl relative z-10 flex flex-col min-h-[500px] justify-between">
+        
+        <div>
+            <div class="text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 tracking-wide drop-shadow-lg">ပထမပြန် အောင်စာရင်း</h1>
+                <p class="text-blue-200 text-sm md:text-base">သာသနာရေးဦးစီးဌာနမှ ထုတ်ပြန်သော အောင်စာရင်းများ</p>
+            </div>
+
+            <form class="space-y-6" id="searchForm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-white/90 text-sm font-medium mb-2 text-shadow">တိုင်းဒေသကြီး / ပြည်နယ်</label>
+                        <select id="stateSelect" class="w-full bg-white/10 border border-white/20 text-white rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400 appearance-none transition-all cursor-pointer">
+                            <option value="" class="text-gray-900">ရွေးချယ်ပါ</option>
+                            <option value="kachin" class="text-gray-900">ကချင်ပြည်နယ်</option>
+                            <option value="kayah" class="text-gray-900">ကယားပြည်နယ်</option>
+                            <option value="kayin" class="text-gray-900">ကရင်ပြည်နယ်</option>
+                            <option value="chin" class="text-gray-900">ချင်းပြည်နယ်</option>
+                            <option value="sagaing" class="text-gray-900">စစ်ကိုင်းတိုင်းဒေသကြီး</option>
+                            <option value="tanintharyi" class="text-gray-900">တနင်္သာရီတိုင်းဒေသကြီး</option>
+                            <option value="bago" class="text-gray-900">ပဲခူးတိုင်းဒေသကြီး</option>
+                            <option value="magway" class="text-gray-900">မကွေးတိုင်းဒေသကြီး</option>
+                            <option value="mandalay" class="text-gray-900">မန္တလေးတိုင်းဒေသကြီး</option>
+                            <option value="mon" class="text-gray-900">မွန်ပြည်နယ်</option>
+                            <option value="rakhine" class="text-gray-900">ရခိုင်ပြည်နယ်</option>
+                            <option value="yangon" class="text-gray-900">ရန်ကုန်တိုင်းဒေသကြီး</option>
+                            <option value="shan" class="text-gray-900">ရှမ်းပြည်နယ်</option>
+                            <option value="ayeyarwady" class="text-gray-900">ဧရာဝတီတိုင်းဒေသကြီး</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-white/90 text-sm font-medium mb-2">အတန်း</label>
+                        <select id="levelSelect" class="w-full bg-white/10 border border-white/20 text-white rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400 appearance-none transition-all cursor-pointer">
+                            <option value="" class="text-gray-900">ရွေးချယ်ပါ</option>
+                            <option value="pathamagyi" class="text-gray-900">ပထမကြီးတန်း</option>
+                            <option value="pathamalat" class="text-gray-900">ပထမလတ်တန်း</option>
+                            <option value="pathamange" class="text-gray-900">ပထမငယ်တန်း</option>
+                            <option value="mula" class="text-gray-900">အခြေခံမူလတန်း</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-white/90 text-sm font-medium mb-2">အမည် (သို့မဟုတ်) ခုံနံပါတ်ဖြင့် ရှာရန် (ရွေးချယ်ရန်)</label>
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="ဥပမာ - အရှင်ဉာဏ သို့မဟုတ် ရက-၁၂၃" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400 transition-all">
+                    </div>
+                </div>
+
+                <button type="button" id="searchBtn" class="w-full bg-blue-500/80 hover:bg-blue-500 text-white font-bold rounded-xl px-4 py-3 transition duration-300 border border-blue-400/50 shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                    ရှာဖွေမည်
+                </button>
+            </form>
+        </div>
+
+        <div class="mt-10 text-center border-t border-white/10 pt-4">
+            <p class="text-white/70 text-sm tracking-wider flex items-center justify-center gap-2">
+                <span class="text-yellow-400 text-lg">✦</span> 
+                <span class="font-bold text-white text-base drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]">ဘုန်းသန္တိ</span> ဖန်တီးသည် 
+                <span class="text-yellow-400 text-lg">✦</span>
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // Python Script မှ အလိုအလျောက် ရရှိလာမည့် Google Drive Link များ (နမူနာ Data)
+        // တကယ့်အောင်စာရင်းထွက်လာချိန်တွင် ဤ Link များကို အမှန်တကယ် Link များဖြင့် အစားထိုးရပါမည်။
+        const driveLinksData = {
+            "yangon": {
+                "pathamagyi": "https://drive.google.com/drive/folders/dummy-yangon-gyi",
+                "pathamalat": "https://drive.google.com/drive/folders/dummy-yangon-lat",
+                "pathamange": "https://drive.google.com/drive/folders/dummy-yangon-nge",
+                "mula": "https://drive.google.com/drive/folders/dummy-yangon-mula"
+            },
+            "mandalay": {
+                "pathamagyi": "https://drive.google.com/drive/folders/dummy-mdy-gyi",
+                "pathamalat": "https://drive.google.com/drive/folders/dummy-mdy-lat",
+                "pathamange": "https://drive.google.com/drive/folders/dummy-mdy-nge",
+                "mula": "https://drive.google.com/drive/folders/dummy-mdy-mula"
+            }
+            // အခြားသော တိုင်းနှင့် ပြည်နယ်များအတွက် Link များကို ဤနေရာတွင် ဆက်လက်ဖြည့်စွက်နိုင်ပါသည်။
+        };
+
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const state = document.getElementById('stateSelect').value;
+            const level = document.getElementById('levelSelect').value;
+            const searchQuery = document.getElementById('searchInput').value.trim();
+
+            // တိုင်း သို့မဟုတ် အတန်း မရွေးချယ်ထားပါက အသိပေးရန်
+            if (!state || !level) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'အချက်အလက် လိုအပ်နေပါသည်',
+                    text: 'ကျေးဇူးပြု၍ တိုင်း/ပြည်နယ် နှင့် အတန်းကို ပြည့်စုံစွာ ရွေးချယ်ပါ။',
+                    confirmButtonColor: '#3b82f6',
+                    confirmButtonText: 'အိုကေ'
+                });
+                return;
+            }
+
+            // Data ထဲတွင် ရှာဖွေခြင်း
+            if (driveLinksData[state] && driveLinksData[state][level]) {
+                const targetUrl = driveLinksData[state][level];
+                
+                // Loading ပြပြီး ဖွင့်ပေးရန်
+                Swal.fire({
+                    title: 'ရှာဖွေနေပါသည်...',
+                    text: 'Google Drive သို့ ခေါ်ဆောင်သွားပါမည်',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    willClose: () => {
+                        window.open(targetUrl, '_blank');
+                    }
+                });
+
+            } else {
+                // Link မထည့်ရသေးပါက သို့မဟုတ် မထွက်သေးပါက
+                Swal.fire({
+                    icon: 'info',
+                    title: 'မကြာမီ လာမည်',
+                    text: 'ယခုရွေးချယ်ထားသော ဒေသနှင့် အတန်းအတွက် အောင်စာရင်း မထွက်ရှိသေးပါ။ (သို့မဟုတ် Link မရရှိသေးပါ)',
+                    confirmButtonColor: '#3b82f6',
+                    confirmButtonText: 'ပိတ်မည်'
+                });
+            }
+        });
+    </script>
+</body>
+</html>
