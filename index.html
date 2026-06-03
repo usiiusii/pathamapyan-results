@@ -48,13 +48,20 @@
                             <option value="ချင်း" class="text-gray-900">ချင်းပြည်နယ်</option>
                             <option value="စစ်ကိုင်း" class="text-gray-900">စစ်ကိုင်းတိုင်းဒေသကြီး</option>
                             <option value="တနင်္သာရီ" class="text-gray-900">တနင်္သာရီတိုင်းဒေသကြီး</option>
-                            <option value="ပဲခူး" class="text-gray-900">ပဲခူးတိုင်းဒေသကြီး</option>
+                            <option value="နေပြည်တော်" class="text-gray-900">နေပြည်တော်ကောင်စီ</option>
+                            <option value="ပဲခူး (အရှေ့ပိုင်း)" class="text-gray-900">ပဲခူးတိုင်းဒေသကြီး (အရှေ့ပိုင်း)</option>
+                            <option value="ပဲခူး (အနောက်ပိုင်း)" class="text-gray-900">ပဲခူးတိုင်းဒေသကြီး (အနောက်ပိုင်း)</option>
                             <option value="မကွေး" class="text-gray-900">မကွေးတိုင်းဒေသကြီး</option>
                             <option value="မန္တလေး" class="text-gray-900">မန္တလေးတိုင်းဒေသကြီး</option>
                             <option value="မွန်" class="text-gray-900">မွန်ပြည်နယ်</option>
                             <option value="ရခိုင်" class="text-gray-900">ရခိုင်ပြည်နယ်</option>
-                            <option value="ရန်ကုန်" class="text-gray-900">ရန်ကုန်တိုင်းဒေသကြီး</option>
-                            <option value="ရှမ်း" class="text-gray-900">ရှမ်းပြည်နယ်</option>
+                            <option value="ရန်ကုန် (အရှေ့ပိုင်း)" class="text-gray-900">ရန်ကုန်တိုင်းဒေသကြီး (အရှေ့ပိုင်း)</option>
+                            <option value="ရန်ကုန် (အနောက်ပိုင်း)" class="text-gray-900">ရန်ကုန်တိုင်းဒေသကြီး (အနောက်ပိုင်း)</option>
+                            <option value="ရန်ကုန် (တောင်ပိုင်း)" class="text-gray-900">ရန်ကုန်တိုင်းဒေသကြီး (တောင်ပိုင်း)</option>
+                            <option value="ရန်ကုန် (မြောက်ပိုင်း)" class="text-gray-900">ရန်ကုန်တိုင်းဒေသကြီး (မြောက်ပိုင်း)</option>
+                            <option value="ရှမ်း (အရှေ့ပိုင်း)" class="text-gray-900">ရှမ်းပြည်နယ် (အရှေ့ပိုင်း)</option>
+                            <option value="ရှမ်း (တောင်ပိုင်း)" class="text-gray-900">ရှမ်းပြည်နယ် (တောင်ပိုင်း)</option>
+                            <option value="ရှမ်း (မြောက်ပိုင်း)" class="text-gray-900">ရှမ်းပြည်နယ် (မြောက်ပိုင်း)</option>
                             <option value="ဧရာဝတီ" class="text-gray-900">ဧရာဝတီတိုင်းဒေသကြီး</option>
                         </select>
                     </div>
@@ -100,28 +107,21 @@
     <script>
         let driveLinksData = {};
 
-        // Website စပွင့်တာနဲ့ data.json ကို အလိုအလျောက် လှမ်းဖတ်ပါမည်
         fetch('./data.json')
             .then(response => {
-                if (!response.ok) {
-                    throw new Error("JSON ဖိုင်ကို ရှာမတွေ့ပါ။");
-                }
+                if (!response.ok) throw new Error("JSON ဖိုင်ကို ရှာမတွေ့ပါ။");
                 return response.json();
             })
             .then(data => {
                 driveLinksData = data;
                 console.log("Data အောင်မြင်စွာ ရယူပြီးပါပြီ");
             })
-            .catch(error => {
-                console.error("Data ယူရာတွင် Error ဖြစ်နေပါသည်:", error);
-            });
+            .catch(error => console.error("Data ယူရာတွင် Error ဖြစ်နေပါသည်:", error));
 
-        // ရှာဖွေမည် ခလုတ်ကို နှိပ်လိုက်သောအခါ လုပ်ဆောင်မည့် အလုပ်များ
         document.getElementById('searchBtn').addEventListener('click', function() {
             const state = document.getElementById('stateSelect').value;
             const level = document.getElementById('levelSelect').value;
 
-            // တိုင်း သို့မဟုတ် အတန်း မရွေးချယ်ထားပါက အသိပေးရန်
             if (!state || !level) {
                 Swal.fire({
                     icon: 'warning',
@@ -133,11 +133,9 @@
                 return;
             }
 
-            // data.json ထဲတွင် အချက်အလက် ရှိ/မရှိ စစ်ဆေးခြင်း
             if (driveLinksData[state] && driveLinksData[state][level]) {
                 const targetUrl = driveLinksData[state][level];
                 
-                // Link က အလွတ် ("") ဖြစ်မနေဘူးဆိုလျှင် Drive သို့ ဖွင့်ပေးမည်
                 if (targetUrl.trim() !== "") {
                     Swal.fire({
                         title: 'ရှာဖွေနေပါသည်...',
@@ -145,12 +143,9 @@
                         icon: 'success',
                         timer: 1500,
                         showConfirmButton: false,
-                        willClose: () => {
-                            window.open(targetUrl, '_blank');
-                        }
+                        willClose: () => window.open(targetUrl, '_blank')
                     });
                 } else {
-                    // Link ကို ဖြည့်မထားသေးလျှင် အောက်ပါအတိုင်း ပြမည်
                     Swal.fire({
                         icon: 'info',
                         title: 'မကြာမီ လာမည်',
@@ -161,7 +156,6 @@
                 }
 
             } else {
-                // JSON ထဲတွင် အချက်အလက် လုံးဝမတွေ့ပါက
                 Swal.fire({
                     icon: 'info',
                     title: 'မကြာမီ လာမည်',
